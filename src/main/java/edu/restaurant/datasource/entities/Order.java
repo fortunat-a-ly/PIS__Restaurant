@@ -30,6 +30,10 @@ public class Order {
         this.timestamp = timestamp;
     }
 
+    public Order() {
+
+    }
+
     public int getId() {
         return id;
     }
