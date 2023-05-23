@@ -30,6 +30,10 @@ public class Order {
         this.timestamp = timestamp;
     }
 
+    public Order() {
+
+    }
+
     public int getId() {
         return id;
     }
@@ -68,6 +72,10 @@ public class Order {
 
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public Meal getMeal() {
+        return meal;
     }
 
     @Override
