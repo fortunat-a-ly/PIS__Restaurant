@@ -1,0 +1,70 @@
+create table if not exists meals
+(
+    id serial primary key,
+    name varchar(40) not null,
+    price decimal(7, 2) not null
+);
+create table if not exists order_status
+(
+    id serial primary key,
+    name varchar(15) not null
+);
+create table if not exists orders
+(
+    id serial primary key,
+    meal_id serial not null,
+    customer_id serial not null,
+    status serial not null,
+    quantity int not null default 1,
+    creation_date timestamp default (now()) not null
+);
+create table if not exists role
+(
+    id serial primary key,
+    name varchar(20) not null
+);
+create table if not exists users
+(
+    id serial primary key,
+    email varchar(25) not null unique,
+    password char(60) not null,
+    role serial not null
+);
+create table if not exists order_status
+(
+    id serial primary key,
+    name varchar(20) not null
+);
+
+ALTER TABLE orders
+    ADD CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES users (id);
+
+ALTER TABLE orders
+    ADD CONSTRAINT fk_orders_statuses FOREIGN KEY (status) REFERENCES order_status (id);
+
+ALTER TABLE users
+    ADD CONSTRAINT fk_users_roles FOREIGN KEY (role) REFERENCES role (id);
+
+/*
+INSERT INTO order_status(name) VALUES ('PREPARING');
+INSERT INTO order_status(name) VALUES ('READY');
+INSERT INTO order_status(name) VALUES ('RECEIVED');
+
+INSERT INTO role(name) VALUES ('admin');
+INSERT INTO role(name) VALUES ('customer');
+ */
+
+SELECT * FROM users;
+
+/*
+drop table users;
+drop table orders;
+drop table meals;
+drop table order_status;
+drop table role;
+*/
+/*
+delete from users;
+delete from orders;
+delete from meals;
+ */
