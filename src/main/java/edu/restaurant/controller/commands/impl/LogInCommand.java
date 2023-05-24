@@ -2,6 +2,7 @@ package edu.restaurant.controller.commands.impl;
 
 import edu.restaurant.controller.commands.Command;
 import edu.restaurant.datasource.entities.User;
+import edu.restaurant.datasource.entities.UserRole;
 import edu.restaurant.manager.PageManager;
 import edu.restaurant.service.UserService;
 
@@ -15,25 +16,28 @@ public class LogInCommand implements Command {
     @Override
     public String execute(HttpServletRequest request,
                           HttpServletResponse response) throws Exception {
-        HttpSession session = request.getSession(false);
+        if (request.getMethod().equals("GET")) {
+            HttpSession session = request.getSession(false);
+            System.out.println("GET1");
+            if(session != null && session.getAttribute("id") != null) {
+                return PageManager.MEALS_REDIRECT;
+            }
+            System.out.println("GET2");
+            return PageManager.LOGIN;
+        } else if (request.getMethod().equals("POST")) {
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
 
-        // check if already logged in
-        if(session.getAttribute("email") != null) {
-            return PageManager.MEALS;
+            try {
+                User user = userService.getAccountByEmail(email);
+                request.getSession().setAttribute("id", user.getId());
+                request.getSession().setAttribute("role", user.getRole());
+
+                return PageManager.MEALS_REDIRECT;
+            } catch (Exception e) {
+                throw e;
+            }
         }
-
-        String email=request.getParameter("email");
-        String password=request.getParameter("password");
-
-        User user = userService.getAccountByEmail(email);
-        // check if login is successful
-        if(user.getEmail().equals(email) && user.getPassword().equals(password)) {
-            request.getSession().setAttribute("email",email);
-            request.getSession().setAttribute("id", user.getId());
-            request.getSession().setAttribute("role", user.getRole());
-            return PageManager.ORDERS;
-        }
-
         return PageManager.LOGIN;
     }
 }

@@ -1,11 +1,19 @@
 package edu.restaurant.datasource.entities;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 
+@Table(name = "meals")
+@Entity
 public class Meal {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
      private int id;
+    @Column(name = "name")
      private String name;
+    @Column(name = "price")
      private BigDecimal price;
 
     public Meal(int id) {
@@ -20,6 +28,8 @@ public class Meal {
         this.name = name;
         this.price = price;
     }
+
+    public Meal() {}
 
     public int getId() {
         return id;

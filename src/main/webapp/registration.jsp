@@ -13,11 +13,10 @@
 <body>
 <nav>
     <ul>
-        <li><a href="meals.jsp">Meals</a></li>
-        <li><a href="login.jsp">Login</a></li>
+        <li><a href="restaurant/login">Login</a></li>
     </ul>
 </nav>
-<form action="<%= request.getContextPath() %>/registration.jsp" method="post">
+<form action="<%= request.getContextPath() %>/registration" method="post">
     <table>
         <tr>
             <td>Email</td>

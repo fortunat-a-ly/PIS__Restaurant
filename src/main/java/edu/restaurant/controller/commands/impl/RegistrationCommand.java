@@ -30,7 +30,7 @@ public class RegistrationCommand implements Command {
 
             try {
                 accountService.registerAccount(user);
-                return PageManager.LOGIN;
+                return PageManager.LOGIN_REDIRECT;
             } catch (Exception e) {
                 throw e;
             }

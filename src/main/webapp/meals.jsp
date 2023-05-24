@@ -17,6 +17,14 @@
     </style>
 </head>
 <body>
+<header>
+    <nav>
+        <ul>
+            <li><a href="/restaurant/orders">Orders</a></li>
+            <li><a href="/restaurant/logout">Log out</a></li>
+        </ul>
+    </nav>
+</header>
 <h1>Meal List</h1>
 <table>
     <thead>
@@ -27,7 +35,7 @@
     </thead>
     <tbody>
     <%
-        List<Meal> orderList = (List<Meal>) request.getAttribute("mealList");
+        List<Meal> orderList = (List<Meal>) request.getAttribute("list");
         for (Meal meal : orderList) { %>
     <tr>
         <td><%= meal.getName() %></td>

@@ -9,16 +9,16 @@ public class JDBCDaoFactory extends DaoFactory {
 
     @Override
     public UserDao createUserDao() throws Exception {
-        return new JDBCUserDAO(getConnection());
+        return new JDBCUserDAO(getEntityManagerFactory());
     }
 
     @Override
     public MealDao createMealDao() throws Exception {
-        return new JDBCMealDAO(getConnection());
+        return new JDBCMealDAO(getEntityManagerFactory());
     }
 
     @Override
     public OrderDao createOrderDao() throws Exception {
-        return new JDBCOrderDAO(getConnection());
+        return new JDBCOrderDAO(getEntityManagerFactory());
     }
 }

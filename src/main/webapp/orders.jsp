@@ -19,10 +19,8 @@
 <header>
     <nav>
         <ul>
-            <li><a href="restaurant/meals.jsp">Shopping Cart</a></li>
-            <li><a href="myServlet?command=gotomain">Main</a></li>
-            <li><a href="myServlet?command=gotolibrary">Library</a></li>
-            <li><a href="myServlet?command=logout">Logout</a></li>
+            <li><a href="/restaurant/meals">Meals</a></li>
+            <li><a href="/restaurant/logout">Log out</a></li>
         </ul>
     </nav>
 </header>
@@ -33,19 +31,20 @@
         <th>Order ID</th>
         <th>Customer ID</th>
         <th>Product Name</th>
-        <th>Quantity</th>
         <th>Total Price</th>
+        <th>Status</th>
     </tr>
     </thead>
     <tbody>
     <%
-        List<Order> orderList = (List<Order>) request.getAttribute("orderList");
+        List<Order> orderList = (List<Order>) request.getAttribute("list");
         for (Order order : orderList) { %>
     <tr>
         <td><%= order.getId() %></td>
-        <td><%= order.() %></td>
-        <td><%= order.getQuantity() %></td>
-        <td><%= order.getTotalPrice() %></td>
+        <td><%= order.getCustomerId() %></td>
+        <td><%= order.getMeal().getName() %></td>
+        <td><%= order.getMeal().getPrice() %></td>
+        <td><%= order.getStatus().toString() %></td>
     </tr>
     <% } %>
     </tbody>

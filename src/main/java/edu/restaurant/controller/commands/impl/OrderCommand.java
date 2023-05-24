@@ -15,11 +15,11 @@ public class OrderCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession(false);
-        if(session.getAttribute("email") == null)
-            return PageManager.LOGIN;
+        if(session == null || session.getAttribute("id") == null)
+            return PageManager.LOGIN_REDIRECT;
 
         boolean isAdmin = UserRole.ADMINISTRATOR.equals(session.getAttribute("role"));
-        int userId = Integer.parseInt((String)session.getAttribute("user_id"));
+        int userId = (int)session.getAttribute("id");
 
         if (request.getMethod().equals("POST") && isAdmin) {
             int orderId = Integer.parseInt(request.getParameter("order_id"));

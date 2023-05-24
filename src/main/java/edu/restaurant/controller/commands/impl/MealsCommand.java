@@ -19,17 +19,17 @@ public class MealsCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession(false);
-        if(session.getAttribute("email") == null)
-            return PageManager.LOGIN;
+        if(session == null || session.getAttribute("id") == null)
+            return PageManager.LOGIN_REDIRECT;
 
         boolean isAdmin = UserRole.ADMINISTRATOR.equals(session.getAttribute("role"));
 
         if (request.getMethod().equals("POST") && !isAdmin) {
             int mealId = Integer.parseInt(request.getParameter("order_id"));
-            int userId = Integer.parseInt((String)session.getAttribute("user_id"));
+            int userId = Integer.parseInt((String)session.getAttribute("id"));
             Order order = new Order(mealId, userId, OrderStatus.PREPARING);
             orderService.createOrder(order);
-           return PageManager.ORDERS;
+           return PageManager.ORDERS_REDIRECT;
         }
 
         request.setAttribute("list", mealService.getAll());

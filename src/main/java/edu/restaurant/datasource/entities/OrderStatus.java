@@ -2,8 +2,7 @@ package edu.restaurant.datasource.entities;
 
 public enum OrderStatus {
     PREPARING(1),
-    READY(2),
-    RECEIVED(3);
+    READY(2);
 
     private final int code;
 

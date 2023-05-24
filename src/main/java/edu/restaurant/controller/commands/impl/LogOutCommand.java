@@ -14,8 +14,7 @@ public class LogOutCommand implements Command {
         if(session != null) {
            session.invalidate();
         }
-
-        return PageManager.LOGIN;
+        return PageManager.LOGIN_REDIRECT;
     }
 
 }

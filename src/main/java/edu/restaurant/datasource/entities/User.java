@@ -1,10 +1,22 @@
 package edu.restaurant.datasource.entities;
 
+import edu.restaurant.datasource.utils.CustomUserRoleEnumConverter;
+
+import javax.persistence.*;
+
+@Table(name = "users")
+@Entity
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+    @Column(name = "email")
     private String email;
+    @Column(name = "password")
     private String password;
+    @Convert(converter = CustomUserRoleEnumConverter.class)
     private UserRole role;
 
     public User(String email, String password, UserRole role) {
@@ -18,6 +30,8 @@ public class User {
         this.password = password;
         this.role = role;
     }
+
+    public User() {}
 
     public int getId() {
         return id;
@@ -60,4 +74,5 @@ public class User {
                 ", role=" + role +
                 '}';
     }
+
 }

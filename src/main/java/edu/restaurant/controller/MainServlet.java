@@ -1,6 +1,9 @@
 package edu.restaurant.controller;
 
+import edu.restaurant.controller.commands.Command;
+import edu.restaurant.controller.commands.impl.LogInCommand;
 import edu.restaurant.manager.CommandManager;
+import edu.restaurant.manager.PageManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,10 +31,21 @@ public class MainServlet extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            String page = CommandManager.getCommand(request).execute(request, response);
-            response.sendRedirect(page);
+            System.out.println("SERVLET");
+            String webPage = null;
+            Command command = CommandManager.getCommand(request);
+            webPage = command.execute(request, response);
+
+
+            if (webPage.startsWith("redirect")) {
+                response.sendRedirect(webPage.substring(8));
+                return;
+            }
+
+            request.getRequestDispatcher(webPage).forward(request, response);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            response.sendRedirect(PageManager.ERROR_REDIRECT.substring(8));
         }
     }
 }
