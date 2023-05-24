@@ -37,6 +37,10 @@ public class RestaurantMain {
             System.out.println(customerId + " " + userDao.getUserById(customerId));
             System.out.println(breadId + " " +mealDao.getMealById(breadId));
             System.out.println(pastaOrderId + " " + orderDao.getOrderById(pastaOrderId));
+            Order readyOrder = orderDao.getOrderById(pastaOrderId);
+            readyOrder.setStatus(OrderStatus.READY);
+            orderDao.updateOrder(readyOrder);
+            System.out.println(pastaOrderId + " " + readyOrder);
 
             List<Meal> meals = mealDao.getAllMeals();
             for(Meal m : meals) {

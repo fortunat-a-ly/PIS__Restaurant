@@ -1,12 +1,26 @@
 package edu.restaurant.datasource.entities;
 
+import edu.restaurant.datasource.utils.CustomOrderStatusEnumConverter;
+import edu.restaurant.datasource.utils.CustomUserRoleEnumConverter;
+
+import javax.persistence.*;
 import java.sql.Timestamp;
 
+@Table(name = "orders")
+@Entity
 public class Order {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "meal_id")
     private Meal meal;
+    @Column(name = "customer_id")
     private int customerId;
+    @Convert(converter = CustomOrderStatusEnumConverter.class)
     private OrderStatus status;
+    @Column(name = "creation_date", nullable = true)
     private Timestamp timestamp;
 
     public Order(int mealId, int customerId, OrderStatus status, Timestamp timestamp) {
@@ -87,5 +101,12 @@ public class Order {
                 ", status=" + status +
                 ", timestamp=" + timestamp +
                 '}';
+    }
+
+    @PrePersist
+    public void setCreatedAtDefault() {
+        if (this.timestamp == null) {
+            this.timestamp = new Timestamp(System.currentTimeMillis());
+        }
     }
 }
