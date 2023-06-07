@@ -5,7 +5,7 @@ import edu.restaurant.datasource.entities.Order;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface OrderDao extends AutoCloseable{
+public interface OrderDao {
     List<Order> getAllOrders() throws SQLException;
     Order getOrderById(int id) throws SQLException;
     List<Order> getOrdersByClientId(int clientId) throws SQLException;

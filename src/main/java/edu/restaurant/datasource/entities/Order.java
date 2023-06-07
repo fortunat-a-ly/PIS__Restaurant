@@ -3,7 +3,7 @@ package edu.restaurant.datasource.entities;
 import edu.restaurant.datasource.utils.CustomOrderStatusEnumConverter;
 import edu.restaurant.datasource.utils.CustomUserRoleEnumConverter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.sql.Timestamp;
 
 @Table(name = "orders")

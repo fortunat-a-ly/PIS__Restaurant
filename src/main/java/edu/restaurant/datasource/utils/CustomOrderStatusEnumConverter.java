@@ -2,8 +2,8 @@ package edu.restaurant.datasource.utils;
 
 import edu.restaurant.datasource.entities.OrderStatus;
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 
 @Converter
 public class CustomOrderStatusEnumConverter implements AttributeConverter<OrderStatus, Integer> {

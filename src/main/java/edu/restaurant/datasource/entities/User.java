@@ -2,7 +2,7 @@ package edu.restaurant.datasource.entities;
 
 import edu.restaurant.datasource.utils.CustomUserRoleEnumConverter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Table(name = "users")
 @Entity

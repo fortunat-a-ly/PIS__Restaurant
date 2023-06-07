@@ -2,65 +2,50 @@ package edu.restaurant.datasource.dao.mysqldao;
 
 import edu.restaurant.datasource.dao.MealDao;
 import edu.restaurant.datasource.entities.Meal;
+import edu.restaurant.datasource.repository.MealRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 import java.sql.SQLException;
 import java.util.List;
 
+@Component
 public class JDBCMealDAO implements MealDao {
 
-    private EntityManager entityManager;
+    private MealRepository repository;
 
-    public JDBCMealDAO(EntityManagerFactory factory) {
-        this.entityManager = factory.createEntityManager();
+    @Autowired
+    public JDBCMealDAO(MealRepository repository) {
+        this.repository = repository;
     }
-
     @Override
     public List<Meal> getAllMeals() throws SQLException {
-        return entityManager.createQuery("SELECT o FROM Meal o", Meal.class)
-                .getResultList();
+        return repository.findAll();
     }
 
     @Override
     public Meal getMealById(int id) throws SQLException {
-        return entityManager.find(Meal.class, id);
+        return repository.findById(id).orElse(null);
     }
 
     @Override
     public int addMeal(Meal meal) throws SQLException {
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        entityManager.persist(meal);
-        entityManager.flush();
-        entityManager.refresh(meal);
-        transaction.commit();
+        repository.save(meal);
         return meal.getId();
     }
 
     @Override
     public void updateMeal(Meal meal) throws SQLException {
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        Meal existingEntity = entityManager.find(Meal.class, meal.getId());
-        existingEntity.setPrice(meal.getPrice());
-        entityManager.merge(existingEntity);
-        transaction.commit();
+        repository.update(meal);
     }
 
     @Override
     public void deleteMeal(int id) throws SQLException {
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        Meal entity = entityManager.find(Meal.class, id);
-        entityManager.remove(entity);
-        transaction.commit();
+        repository.deleteById(id);
     }
 
-    @Override
-    public void close() throws Exception {
-        entityManager.close();
-    }
 }
 

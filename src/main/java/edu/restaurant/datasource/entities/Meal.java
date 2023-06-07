@@ -1,7 +1,7 @@
 package edu.restaurant.datasource.entities;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
+import jakarta.persistence.*;
 
 @Table(name = "meals")
 @Entity

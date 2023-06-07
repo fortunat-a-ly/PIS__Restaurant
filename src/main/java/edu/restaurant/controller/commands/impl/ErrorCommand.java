@@ -1,14 +1,14 @@
 package edu.restaurant.controller.commands.impl;
 
-import edu.restaurant.controller.commands.Command;
 import edu.restaurant.manager.PageManager;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-public class ErrorCommand implements Command {
-    @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+@Controller
+public class ErrorCommand {
+    @RequestMapping(value = "/error", method = {RequestMethod.GET, RequestMethod.POST})
+    public String execute() {
         return PageManager.ERROR;
     }
 }

@@ -6,7 +6,7 @@
 <header>
   <nav>
     <ul>
-      <li><a href="/restaurant/registration">Register</a></li>
+      <li><a href="/registration">Register</a></li>
     </ul>
   </nav>
 </header>

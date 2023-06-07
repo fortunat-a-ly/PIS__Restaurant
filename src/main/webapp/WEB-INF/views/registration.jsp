@@ -13,7 +13,7 @@
 <body>
 <nav>
     <ul>
-        <li><a href="restaurant/login">Login</a></li>
+        <li><a href="/login">Login</a></li>
     </ul>
 </nav>
 <form action="<%= request.getContextPath() %>/registration" method="post">
@@ -28,7 +28,7 @@
         </tr>
         <tr>
             <td>Confirm Password</td>
-            <td><input type="password" name="confirm_password" /></td>
+            <td><input type="password" name="confirmPassword" /></td>
         </tr>
     </table>
     <input type="submit" value="Submit" />

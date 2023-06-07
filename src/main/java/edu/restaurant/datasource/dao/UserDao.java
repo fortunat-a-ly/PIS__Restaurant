@@ -4,7 +4,7 @@ import edu.restaurant.datasource.entities.User;
 
 import java.sql.SQLException;
 
-public interface UserDao extends AutoCloseable {
+public interface UserDao {
     User getUserById(int id) throws SQLException;
     User getUserByEmail(String email) throws SQLException;
     int addUser(User user) throws SQLException;

@@ -1,38 +1,62 @@
 package edu.restaurant.controller.commands.impl;
 
-import edu.restaurant.controller.commands.Command;
+import edu.restaurant.datasource.entities.Order;
 import edu.restaurant.datasource.entities.UserRole;
 import edu.restaurant.manager.PageManager;
 import edu.restaurant.service.OrderService;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import java.sql.SQLException;
+import java.util.List;
 
-public class OrderCommand implements Command {
+@Controller
+public class OrderCommand {
 
-    private static final OrderService orderService = new OrderService();
-    @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) {
-        HttpSession session = request.getSession(false);
+    private final OrderService orderService;
+
+    @Autowired
+    public OrderCommand(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
+    @PostMapping("/orders")
+    public String post(@RequestParam Integer orderId, HttpSession session, Model model) throws SQLException {
         if(session == null || session.getAttribute("id") == null)
             return PageManager.LOGIN_REDIRECT;
 
         boolean isAdmin = UserRole.ADMINISTRATOR.equals(session.getAttribute("role"));
         int userId = (int)session.getAttribute("id");
 
-        if (request.getMethod().equals("POST") && isAdmin) {
-            int orderId = Integer.parseInt(request.getParameter("itemId"));
-            orderService.markOrderAsReady(orderId);
-        }
-
         if(isAdmin) {
-            request.setAttribute("list", orderService.findOrders());
+            orderService.markOrderAsReady(orderId);
+            model.addAttribute("list", orderService.findOrders());
         } else {
-            request.setAttribute("list", orderService.findCustomerOrders(userId));
+            model.addAttribute("list", orderService.findCustomerOrders(userId));
         }
 
         return PageManager.ORDERS;
     }
 
+    @GetMapping("/orders")
+    public String get(HttpSession session, Model model) throws SQLException {
+        if(session == null || session.getAttribute("id") == null)
+            return PageManager.LOGIN_REDIRECT;
+
+        boolean isAdmin = UserRole.ADMINISTRATOR.equals(session.getAttribute("role"));
+        int userId = (int)session.getAttribute("id");
+
+        if(isAdmin) {
+            model.addAttribute("list", orderService.findOrders());
+        } else {
+            model.addAttribute("list", orderService.findCustomerOrders(userId));
+        }
+
+        return PageManager.ORDERS;
+    }
 }

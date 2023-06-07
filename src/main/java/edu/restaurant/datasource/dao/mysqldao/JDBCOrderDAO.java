@@ -2,73 +2,52 @@ package edu.restaurant.datasource.dao.mysqldao;
 
 import edu.restaurant.datasource.dao.OrderDao;
 import edu.restaurant.datasource.entities.Order;
+import edu.restaurant.datasource.repository.OrderRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.List;
 
+@Component
 public class JDBCOrderDAO implements OrderDao {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    private final OrderRepository repository;
 
-    public JDBCOrderDAO(EntityManagerFactory factory) {
-        this.entityManager = factory.createEntityManager();
+    @Autowired
+    JDBCOrderDAO(OrderRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public List<Order> getAllOrders() {
-        return entityManager.createQuery("SELECT o FROM Order o JOIN FETCH o.meal", Order.class)
-                .getResultList();
+        return repository.findAll();
     }
 
     @Override
     public Order getOrderById(int id) {
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        String jpql = "SELECT o FROM Order o JOIN FETCH o.meal m WHERE o.id = :id";
-        TypedQuery<Order> query = entityManager.createQuery(jpql, Order.class);
-        query.setParameter("id", id);
-        transaction.commit();
-        return query.getSingleResult();
+        return repository.findById(id).orElse(null);
     }
 
     @Override
     public List<Order> getOrdersByClientId(int customerId) {
-        return entityManager.createQuery("SELECT o FROM Order o JOIN FETCH o.meal WHERE o.customerId = :customerId", Order.class)
-                .setParameter("customerId", customerId)
-                .getResultList();
+        return repository.findAllByCustomerId(customerId);
     }
 
     @Override
     public int addOrder(Order order) {
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        entityManager.persist(order);
-        transaction.commit();
+        repository.save(order);
         return order.getId();
     }
 
     @Override
     public void updateOrder(Order order) {
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        Order existingEntity = entityManager.find(Order.class, order.getId());
-        existingEntity.setStatus(order.getStatus());
-        entityManager.merge(existingEntity);
-        transaction.commit();
+        repository.update(order);
     }
 
     @Override
     public void deleteOrder(int id) {
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        Order order = entityManager.find(Order.class, id);
-        entityManager.remove(order);
-        transaction.commit();
+        repository.deleteById(id);
     }
 
-    @Override
-    public void close() throws Exception {
-        entityManager.close();
-    }
 }

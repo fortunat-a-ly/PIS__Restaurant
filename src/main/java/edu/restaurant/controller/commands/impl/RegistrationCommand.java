@@ -1,40 +1,38 @@
 package edu.restaurant.controller.commands.impl;
 
-import edu.restaurant.controller.commands.Command;
 import edu.restaurant.datasource.entities.User;
 import edu.restaurant.datasource.entities.UserRole;
 import edu.restaurant.manager.PageManager;
 import edu.restaurant.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+@Controller
+public class RegistrationCommand {
 
-public class RegistrationCommand implements Command {
+    private final UserService accountService;
 
-    private final UserService accountService = new UserService();
+    @Autowired
+    public RegistrationCommand(UserService accountService) {
+        this.accountService = accountService;
+    }
 
-    @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        if (request.getMethod().equals("GET")) {
-            return PageManager.REGISTRATION;
-        } else {
-            String email = request.getParameter("email");
-            String password = request.getParameter("password");
-            String confirmPassword = request.getParameter("confirm_password");
-
-            if(email.isEmpty() || password.isEmpty() || !password.equals(confirmPassword)) {
-                throw new IllegalArgumentException("Invalid password or email");
-            }
-
-            User user = new User(email, password, UserRole.CUSTOMER);
-
-            try {
-                accountService.registerAccount(user);
-                return PageManager.LOGIN_REDIRECT;
-            } catch (Exception e) {
-                throw e;
-            }
+    @PostMapping("/registration")
+    public String post(@RequestParam String email, @RequestParam String password, @RequestParam String confirmPassword) throws Exception {
+        if(email.isEmpty() || password.isEmpty() || !password.equals(confirmPassword)) {
+            throw new IllegalArgumentException("Invalid password or email");
         }
+        User user = new User(email, password.trim(), UserRole.CUSTOMER);
+        accountService.registerAccount(user);
+        return PageManager.LOGIN_REDIRECT;
+    }
+
+    @GetMapping("/registration")
+    public String get() {
+        return PageManager.REGISTRATION;
     }
 
 }
